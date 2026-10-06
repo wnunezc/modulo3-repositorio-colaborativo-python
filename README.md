@@ -7,7 +7,7 @@ Proyecto del Modulo 3 para practicar GitHub, ramas, Pull Requests y colaboracion
 El repositorio contiene tres modulos separados con funcionalidades diferentes:
 
 - `modulos/matematicas.py`: funciones para operaciones matematicas.
-- `modulos/cuento.py`: funcion para imprimir un cuento corto.
+- `modulos/cuento.py`: imprime un cuento con titulo, varios parrafos y moraleja. Permite cambiar el nombre del protagonista con `imprimir_cuento("Nombre")`.
 - `modulos/saludos.py`: funcion reutilizada del Modulo 2 para imprimir un saludo.
 
 El archivo `main.py` ejecuta las funciones principales de cada modulo.
@@ -39,7 +39,12 @@ Salida esperada:
 ```text
 Hola, GitHub
 Resultado de 1 + 1: 2
+El equipo que aprendio Git
+==========================
+
 Habia una vez un equipo que aprendio Git colaborando en Python.
+...
+Moraleja: trabajar en equipo, con orden y revisiones, mejora el resultado de todos.
 ```
 
 ## Colaboracion
