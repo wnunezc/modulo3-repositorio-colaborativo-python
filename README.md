@@ -6,7 +6,7 @@ Proyecto del Modulo 3 para practicar GitHub, ramas, Pull Requests y colaboracion
 
 El repositorio contiene tres modulos separados con funcionalidades diferentes:
 
-- `modulos/matematicas.py`: funciones para operaciones matematicas.
+- `modulos/matematicas.py`: funciones para operaciones matematicas como suma, resta, multiplicacion, division y potencia.
 - `modulos/cuento.py`: imprime un cuento con titulo, varios parrafos y moraleja. Permite cambiar el nombre del protagonista con `imprimir_cuento("Nombre")`.
 - `modulos/saludos.py`: funcion reutilizada del Modulo 2 para imprimir un saludo.
 
@@ -38,7 +38,12 @@ Salida esperada:
 
 ```text
 Hola, GitHub
+Operaciones disponibles: suma, resta, multiplicacion, division, potencia
 Resultado de 1 + 1: 2
+Resultado de 5 - 2: 3
+Resultado de 3 * 4: 12
+Resultado de 10 / 2: 5.0
+Resultado de 2 ** 3: 8
 El equipo que aprendio Git
 ==========================
 
