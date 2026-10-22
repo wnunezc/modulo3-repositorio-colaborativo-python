@@ -17,7 +17,10 @@ edades = {
 }
 
 # ---------- Persona B: entrada del usuario ----------
-# Pendiente: la Persona B agrega el input
+nombre_ingresado = input("Ingresa un nombre: ").strip()
 
 # ---------- Persona B: condicional ----------
-# Pendiente: la Persona B agrega el if / else
+if nombre_ingresado in edades:
+    print(f"{nombre_ingresado} tiene {edades[nombre_ingresado]} años.")
+else:
+    print(f"{nombre_ingresado} no fue encontrado.")
