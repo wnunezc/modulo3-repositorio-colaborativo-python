@@ -1,6 +1,7 @@
 from modulos.cuento import imprimir_cuento
 from modulos.matematicas import calcular, listar_operaciones
 from modulos.saludos import saludar
+from modulos.texto import contar_palabras, contar_vocales
 
 
 def main():
@@ -11,6 +12,10 @@ def main():
     print("Resultado de 3 * 4:", calcular("multiplicacion", 3, 4))
     print("Resultado de 10 / 2:", calcular("division", 10, 2))
     print("Resultado de 2 ** 3:", calcular("potencia", 2, 3))
+    ejemplo = "Python facilita el trabajo en equipo"
+    print("Texto de ejemplo:", ejemplo)
+    print("Cantidad de palabras:", contar_palabras(ejemplo))
+    print("Cantidad de vocales:", contar_vocales(ejemplo))
     imprimir_cuento()
 
 

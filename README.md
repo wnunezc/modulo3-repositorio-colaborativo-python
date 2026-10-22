@@ -4,11 +4,12 @@ Proyecto del Modulo 3 para practicar GitHub, ramas, Pull Requests y colaboracion
 
 ## Descripcion
 
-El repositorio contiene tres modulos separados con funcionalidades diferentes:
+El repositorio contiene cuatro modulos separados con funcionalidades diferentes:
 
 - `modulos/matematicas.py`: funciones para operaciones matematicas como suma, resta, multiplicacion, division y potencia.
 - `modulos/cuento.py`: imprime un cuento con titulo, varios parrafos y moraleja. Permite cambiar el nombre del protagonista con `imprimir_cuento("Nombre")`.
 - `modulos/saludos.py`: funcion reutilizada del Modulo 2 para imprimir un saludo.
+- `modulos/texto.py`: cuenta palabras y vocales de un texto, incluidas las vocales acentuadas.
 
 El archivo `main.py` ejecuta las funciones principales de cada modulo.
 
@@ -21,7 +22,8 @@ El archivo `main.py` ejecuta las funciones principales de cada modulo.
 │   ├── __init__.py
 │   ├── cuento.py
 │   ├── matematicas.py
-│   └── saludos.py
+│   ├── saludos.py
+│   └── texto.py
 ├── CONTRIBUTING.md
 └── README.md
 ```
@@ -44,12 +46,24 @@ Resultado de 5 - 2: 3
 Resultado de 3 * 4: 12
 Resultado de 10 / 2: 5.0
 Resultado de 2 ** 3: 8
+Texto de ejemplo: Python facilita el trabajo en equipo
+Cantidad de palabras: 6
+Cantidad de vocales: 14
 El equipo que aprendio Git
 ==========================
 
 Habia una vez un equipo que aprendio Git colaborando en Python.
 ...
 Moraleja: trabajar en equipo, con orden y revisiones, mejora el resultado de todos.
+```
+
+Las funciones del modulo de texto tambien se pueden usar de forma independiente:
+
+```python
+from modulos.texto import contar_palabras, contar_vocales
+
+print(contar_palabras("Hola mundo"))  # 2
+print(contar_vocales("Hola mundo"))   # 4
 ```
 
 ## Colaboracion
