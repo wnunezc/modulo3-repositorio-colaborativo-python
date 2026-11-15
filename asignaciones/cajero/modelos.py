@@ -2,7 +2,7 @@
 Modelos de datos compartidos por todo el cajero.
 Son el "idioma común" del proyecto: no tienen lógica de negocio.
 """
-from dataclasses import dataclass, field
+from dataclasses import InitVar, dataclass, field
 from enum import Enum
 
 
@@ -23,9 +23,12 @@ class Movimiento:
 class Usuario:
     """Un cliente del cajero con su saldo y su historial de movimientos."""
     nombre: str
-    pin: str = field(repr=False)          # repr=False: el PIN no sale al imprimir
+    pin: InitVar[str]
     saldo: float = 0.0
     movimientos: list[Movimiento] = field(default_factory=list)
 
+    def __post_init__(self, pin: str) -> None:
+        self.__pin = pin
+
     def pin_es_correcto(self, pin: str) -> bool:
-        return self.pin == pin
+        return self.__pin == pin

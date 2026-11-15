@@ -1,6 +1,6 @@
 """
 Operaciones bancarias y registro de movimientos.
-Responsable: Walter Nuñez — PENDIENTE DE IMPLEMENTAR
+Responsable: Walter Nuñez
 
 Implementa IOperaciones (ver interfaces.py). Reglas:
   - No uses print() ni input(): eso lo hace el menú (SRP).
@@ -9,30 +9,40 @@ Implementa IOperaciones (ver interfaces.py). Reglas:
   - Usa un método privado para validar el monto y otro para registrar el
     movimiento, así depositar() y retirar() no repiten código (DRY).
 """
-from excepciones import MontoInvalidoError, SaldoInsuficienteError  # noqa: F401
+import math
+
+from excepciones import MontoInvalidoError, SaldoInsuficienteError
 from interfaces import IOperaciones
-from modelos import Movimiento, TipoMovimiento, Usuario  # noqa: F401
+from modelos import Movimiento, TipoMovimiento, Usuario
 
 
 class ServicioOperaciones(IOperaciones):
 
     def consultar_saldo(self, usuario: Usuario) -> float:
-        # TODO: devolver el saldo del usuario
-        raise NotImplementedError("Pendiente de implementar")
+        return usuario.saldo
 
     def depositar(self, usuario: Usuario, monto: float) -> Movimiento:
-        # TODO:
-        #   1. validar monto > 0, si no: raise MontoInvalidoError("El monto debe ser mayor que 0.")
-        #   2. sumar al saldo
-        #   3. crear Movimiento(TipoMovimiento.DEPOSITO, monto, usuario.saldo)
-        #   4. agregarlo a usuario.movimientos y devolverlo
-        raise NotImplementedError("Pendiente de implementar")
+        self._validar_monto(monto)
+        usuario.saldo += monto
+        return self._registrar_movimiento(usuario, TipoMovimiento.DEPOSITO, monto)
 
     def retirar(self, usuario: Usuario, monto: float) -> Movimiento:
-        # TODO:
-        #   1. validar monto > 0 (mismo método privado que depositar)
-        #   2. si monto > saldo: raise SaldoInsuficienteError(f"Saldo insuficiente. Tienes ${...}")
-        #      y NO modificar nada
-        #   3. restar del saldo, crear Movimiento(TipoMovimiento.RETIRO, ...),
-        #      agregarlo a usuario.movimientos y devolverlo
-        raise NotImplementedError("Pendiente de implementar")
+        self._validar_monto(monto)
+        if monto > usuario.saldo:
+            raise SaldoInsuficienteError(
+                f"Saldo insuficiente. Tienes ${usuario.saldo:,.2f}.")
+        usuario.saldo -= monto
+        return self._registrar_movimiento(usuario, TipoMovimiento.RETIRO, monto)
+
+    @staticmethod
+    def _validar_monto(monto: float) -> None:
+        if (isinstance(monto, bool) or not isinstance(monto, (int, float))
+                or not math.isfinite(monto) or monto <= 0):
+            raise MontoInvalidoError("El monto debe ser mayor que 0 y finito.")
+
+    @staticmethod
+    def _registrar_movimiento(usuario: Usuario, tipo: TipoMovimiento,
+                              monto: float) -> Movimiento:
+        movimiento = Movimiento(tipo, monto, usuario.saldo)
+        usuario.movimientos.append(movimiento)
+        return movimiento

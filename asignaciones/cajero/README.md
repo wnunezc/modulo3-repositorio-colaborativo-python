@@ -14,6 +14,15 @@ Desde la raíz del repositorio:
 python3 asignaciones/cajero/main.py
 ```
 
+El cajero permite consultar saldo, depositar y retirar sin dejar saldo negativo.
+Cada operación exitosa queda en el historial del usuario correspondiente.
+
+## Pruebas
+Desde `asignaciones/cajero/`:
+```bash
+python -m unittest discover -s tests -v
+```
+
 ## Usuarios de prueba
 | Usuario | PIN | Saldo inicial |
 |---|---|---|
