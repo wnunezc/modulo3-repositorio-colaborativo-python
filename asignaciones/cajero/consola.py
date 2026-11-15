@@ -2,6 +2,7 @@
 Entrada/salida por consola y lectura validada de datos.
 Responsable: Marta Lorenzo
 """
+from decimal import Decimal, InvalidOperation
 from typing import Callable, TypeVar
 
 from interfaces import IEntradaSalida
@@ -32,15 +33,16 @@ class LectorDatos:
             texto = self._io.leer(mensaje)
             try:
                 valor = convertir(texto)
-            except ValueError:
+            except (ValueError, InvalidOperation):
                 self._io.mostrar(f"❌ {error}")
                 continue
             if es_valido(valor):
                 return valor
             self._io.mostrar(f"❌ {error}")
 
-    def pedir_monto(self, mensaje: str) -> float:
-        return self.pedir_valido(mensaje, float, lambda m: m > 0,
+    def pedir_monto(self, mensaje: str) -> Decimal:
+        return self.pedir_valido(mensaje, Decimal,
+                                 lambda m: not m.is_nan() and m > 0,
                                  "Ingresa un número mayor que 0.")
 
     def pedir_si_no(self, mensaje: str) -> bool:

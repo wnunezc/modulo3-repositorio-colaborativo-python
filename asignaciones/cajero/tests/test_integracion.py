@@ -1,4 +1,5 @@
 import unittest
+from decimal import Decimal
 
 from autenticacion import AutenticadorPin
 from cajero import Cajero
@@ -60,6 +61,15 @@ class PruebasIntegracion(unittest.TestCase):
         self.assertEqual(usuario.movimientos, [])
         self.assertTrue(any("mayor que 0" in texto for texto in io.mensajes))
         self.assertTrue(any("finito" in texto for texto in io.mensajes))
+
+    def test_centavos_por_consola_y_retiro_exacto(self):
+        cajero, io, repositorio = self.crear_cajero(
+            ["marta", "1234", "2", "0.10", "2", "0.20", "3", "0.30", "5", "n"])
+        cajero.iniciar()
+        usuario = repositorio.buscar("marta")
+        self.assertEqual(usuario.saldo, Decimal("1000.00"))
+        self.assertEqual(usuario.movimientos[-1].saldo_resultante, Decimal("1000.00"))
+        self.assertTrue(any("Nuevo saldo: $1,000.00" in texto for texto in io.mensajes))
 
 
 if __name__ == "__main__":

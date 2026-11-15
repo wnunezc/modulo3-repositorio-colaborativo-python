@@ -2,6 +2,7 @@
 Múltiples usuarios guardados en memoria.
 Responsable: Marta Lorenzo
 """
+from decimal import Decimal
 from typing import Iterable, Optional
 
 from interfaces import IRepositorioUsuarios
@@ -24,7 +25,7 @@ class RepositorioUsuariosMemoria(IRepositorioUsuarios):
 
 def usuarios_de_ejemplo() -> list[Usuario]:
     return [
-        Usuario("Marta", "1234", 1000.0),
-        Usuario("Carlos", "5678", 500.0),
-        Usuario("Ana", "0000", 2500.0),
+        Usuario("Marta", "1234", Decimal("1000.00")),
+        Usuario("Carlos", "5678", Decimal("500.00")),
+        Usuario("Ana", "0000", Decimal("2500.00")),
     ]

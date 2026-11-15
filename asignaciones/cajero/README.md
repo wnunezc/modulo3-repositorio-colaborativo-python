@@ -16,6 +16,8 @@ python3 asignaciones/cajero/main.py
 
 El cajero permite consultar saldo, depositar y retirar sin dejar saldo negativo.
 Cada operación exitosa queda en el historial del usuario correspondiente.
+Los saldos y movimientos se calculan con `Decimal`; los montos admiten centavos
+(máximo dos decimales).
 
 ## Pruebas
 Desde `asignaciones/cajero/`:
