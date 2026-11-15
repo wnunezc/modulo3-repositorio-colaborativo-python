@@ -71,6 +71,17 @@ class PruebasIntegracion(unittest.TestCase):
         self.assertEqual(usuario.movimientos[-1].saldo_resultante, Decimal("1000.00"))
         self.assertTrue(any("Nuevo saldo: $1,000.00" in texto for texto in io.mensajes))
 
+    def test_montos_extremos_se_rechazan_y_el_menu_sigue_activo(self):
+        cajero, io, repositorio = self.crear_cajero(
+            ["marta", "1234", "2", "1.00000000000000000000000000001",
+             "2", "1e999999", "1", "5", "n"])
+        cajero.iniciar()
+        self.assertEqual(repositorio.buscar("marta").saldo, Decimal("1000.00"))
+        self.assertEqual(repositorio.buscar("marta").movimientos, [])
+        self.assertTrue(any("máximo dos decimales" in texto for texto in io.mensajes))
+        self.assertTrue(any("tamaño admitido" in texto for texto in io.mensajes))
+        self.assertTrue(any("$1,000.00" in texto for texto in io.mensajes))
+
 
 if __name__ == "__main__":
     unittest.main()

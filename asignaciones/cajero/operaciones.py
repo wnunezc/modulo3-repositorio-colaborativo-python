@@ -11,6 +11,7 @@ Implementa IOperaciones (ver interfaces.py). Reglas:
 """
 from decimal import Decimal
 
+from dinero import a_centavos, desde_centavos
 from excepciones import MontoInvalidoError, SaldoInsuficienteError
 from interfaces import IOperaciones
 from modelos import Movimiento, TipoMovimiento, Usuario
@@ -22,29 +23,29 @@ class ServicioOperaciones(IOperaciones):
         return usuario.saldo
 
     def depositar(self, usuario: Usuario, monto: Decimal) -> Movimiento:
-        monto = self._validar_monto(monto)
-        usuario.saldo += monto
-        return self._registrar_movimiento(usuario, TipoMovimiento.DEPOSITO, monto)
+        centavos = self._validar_monto(monto)
+        nuevo_saldo = desde_centavos(a_centavos(usuario.saldo) + centavos)
+        usuario.saldo = nuevo_saldo
+        return self._registrar_movimiento(
+            usuario, TipoMovimiento.DEPOSITO, desde_centavos(centavos))
 
     def retirar(self, usuario: Usuario, monto: Decimal) -> Movimiento:
-        monto = self._validar_monto(monto)
-        if monto > usuario.saldo:
+        centavos = self._validar_monto(monto)
+        saldo_centavos = a_centavos(usuario.saldo)
+        if centavos > saldo_centavos:
             raise SaldoInsuficienteError(
                 f"Saldo insuficiente. Tienes ${usuario.saldo:,.2f}.")
-        usuario.saldo -= monto
-        return self._registrar_movimiento(usuario, TipoMovimiento.RETIRO, monto)
+        nuevo_saldo = desde_centavos(saldo_centavos - centavos)
+        usuario.saldo = nuevo_saldo
+        return self._registrar_movimiento(
+            usuario, TipoMovimiento.RETIRO, desde_centavos(centavos))
 
     @staticmethod
-    def _validar_monto(monto: Decimal) -> Decimal:
-        if isinstance(monto, bool) or not isinstance(monto, (int, float, Decimal)):
+    def _validar_monto(monto: Decimal) -> int:
+        centavos = a_centavos(monto)
+        if centavos <= 0:
             raise MontoInvalidoError("El monto debe ser mayor que 0 y finito.")
-        monto = Decimal(str(monto))
-        if not monto.is_finite() or monto <= 0:
-            raise MontoInvalidoError("El monto debe ser mayor que 0 y finito.")
-        centavos = monto * 100
-        if centavos != centavos.to_integral_value():
-            raise MontoInvalidoError("El monto debe tener como máximo dos decimales.")
-        return monto
+        return centavos
 
     @staticmethod
     def _registrar_movimiento(usuario: Usuario, tipo: TipoMovimiento,
