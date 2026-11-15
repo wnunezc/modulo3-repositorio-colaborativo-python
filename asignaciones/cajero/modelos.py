@@ -6,6 +6,8 @@ from dataclasses import InitVar, dataclass, field
 from decimal import Decimal
 from enum import Enum
 
+from dinero import a_centavos, desde_centavos
+
 
 class TipoMovimiento(Enum):
     DEPOSITO = "Depósito"
@@ -30,7 +32,7 @@ class Usuario:
 
     def __post_init__(self, pin: str) -> None:
         self.__pin = pin
-        self.saldo = Decimal(str(self.saldo))
+        self.saldo = desde_centavos(a_centavos(self.saldo))
 
     def pin_es_correcto(self, pin: str) -> bool:
         return self.__pin == pin

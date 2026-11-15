@@ -37,6 +37,29 @@ class PruebasOperaciones(unittest.TestCase):
         self.assertTrue(all(isinstance(mov.monto, Decimal)
                             for mov in usuario.movimientos))
 
+    def test_precision_extrema_no_acepta_fracciones_de_centavo(self):
+        monto = Decimal("1.00000000000000000000000000001")
+        for operacion in (self.servicio.depositar, self.servicio.retirar):
+            with self.subTest(operacion=operacion.__name__):
+                with self.assertRaises(MontoInvalidoError):
+                    operacion(self.usuario, monto)
+        self.assertEqual(self.usuario.saldo, Decimal("1000.00"))
+        self.assertEqual(self.usuario.movimientos, [])
+
+    def test_monto_grande_con_centavos_se_calcula_sin_redondeo(self):
+        usuario = Usuario("Ana", "0000", Decimal("0.00"))
+        monto = Decimal("9999999999999999999999999999.99")
+        self.servicio.depositar(usuario, monto)
+        self.assertEqual(usuario.saldo, monto)
+        self.servicio.retirar(usuario, monto)
+        self.assertEqual(usuario.saldo, Decimal("0.00"))
+
+    def test_monto_excesivo_se_rechaza_sin_modificar_el_saldo(self):
+        with self.assertRaises(MontoInvalidoError):
+            self.servicio.depositar(self.usuario, Decimal("1e999999"))
+        self.assertEqual(self.usuario.saldo, Decimal("1000.00"))
+        self.assertEqual(self.usuario.movimientos, [])
+
     def test_saldo_insuficiente_no_cambia_estado(self):
         with self.assertRaises(SaldoInsuficienteError):
             self.servicio.retirar(self.usuario, 1000.01)
