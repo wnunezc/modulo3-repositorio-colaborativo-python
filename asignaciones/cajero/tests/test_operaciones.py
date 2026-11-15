@@ -1,4 +1,5 @@
 import unittest
+from decimal import Decimal
 
 from excepciones import MontoInvalidoError, SaldoInsuficienteError
 from modelos import TipoMovimiento, Usuario
@@ -26,6 +27,16 @@ class PruebasOperaciones(unittest.TestCase):
         self.assertEqual(self.usuario.saldo, 0.0)
         self.assertEqual(movimiento.saldo_resultante, 0.0)
 
+    def test_centavos_no_dejan_saldo_residual(self):
+        usuario = Usuario("Ana", "0000", Decimal("0.00"))
+        self.servicio.depositar(usuario, 0.1)
+        self.servicio.depositar(usuario, 0.2)
+        movimiento = self.servicio.retirar(usuario, 0.3)
+        self.assertEqual(usuario.saldo, Decimal("0.00"))
+        self.assertEqual(movimiento.saldo_resultante, Decimal("0.00"))
+        self.assertTrue(all(isinstance(mov.monto, Decimal)
+                            for mov in usuario.movimientos))
+
     def test_saldo_insuficiente_no_cambia_estado(self):
         with self.assertRaises(SaldoInsuficienteError):
             self.servicio.retirar(self.usuario, 1000.01)
@@ -33,7 +44,8 @@ class PruebasOperaciones(unittest.TestCase):
         self.assertEqual(self.usuario.movimientos, [])
 
     def test_montos_invalidos_no_cambian_estado(self):
-        for monto in (0, -1, float("nan"), float("inf"), float("-inf"), True):
+        for monto in (0, -1, float("nan"), float("inf"), float("-inf"),
+                      Decimal("0.001"), True):
             for operacion in (self.servicio.depositar, self.servicio.retirar):
                 with self.subTest(monto=monto, operacion=operacion.__name__):
                     with self.assertRaises(MontoInvalidoError):

@@ -2,10 +2,12 @@
 Formato del historial de movimientos.
 Responsable: Marta Lorenzo
 """
+from decimal import Decimal
+
 from modelos import Usuario
 
 
-def formatear_dinero(monto: float) -> str:
+def formatear_dinero(monto: Decimal) -> str:
     """Único lugar donde se da formato al dinero (DRY)."""
     return f"${monto:,.2f}"
 
