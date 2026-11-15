@@ -1,8 +1,8 @@
 """
 Generador del número secreto.
-Responsable: Walter Nuñez — PENDIENTE DE IMPLEMENTAR
+Responsable: Walter Nuñez
 """
-import random  # noqa: F401
+import random
 
 from interfaces import IGeneradorNumeros
 
@@ -10,6 +10,4 @@ from interfaces import IGeneradorNumeros
 class GeneradorAleatorio(IGeneradorNumeros):
 
     def generar(self, minimo: int, maximo: int) -> int:
-        # TODO: devolver un número aleatorio entre minimo y maximo (incluidos).
-        #           Pista: random.randint
-        raise NotImplementedError("Pendiente de implementar")
+        return random.randint(minimo, maximo)

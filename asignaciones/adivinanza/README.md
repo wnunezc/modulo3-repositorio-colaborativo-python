@@ -12,6 +12,16 @@ Desde la raíz del repositorio:
 python3 asignaciones/adivinanza/main.py
 ```
 
+El juego valida las entradas, muestra pistas después de cada intento y termina
+al acertar o agotar cinco intentos. Al finalizar permite jugar otra vez y
+actualiza el marcador.
+
+## Pruebas
+Desde `asignaciones/adivinanza/`:
+```bash
+python -m unittest discover -s tests -v
+```
+
 ## Reparto
 | Archivo | Responsable |
 |---|---|

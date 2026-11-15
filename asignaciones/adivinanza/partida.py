@@ -1,6 +1,6 @@
 """
 Reglas de una partida: número secreto, pistas y límite de intentos (Extensión 1).
-Responsable: Walter Nuñez — PENDIENTE DE IMPLEMENTAR
+Responsable: Walter Nuñez
 
 Implementa IPartida (ver interfaces.py). Reglas:
   - Nada de print() ni input(): eso lo hace JuegoConsola (SRP).
@@ -9,49 +9,55 @@ Implementa IPartida (ver interfaces.py). Reglas:
   - Un número fuera de rango lanza NumeroFueraDeRangoError y NO cuenta como intento.
   - Intentar después de terminar lanza PartidaTerminadaError.
 """
-from excepciones import NumeroFueraDeRangoError, PartidaTerminadaError  # noqa: F401
+from excepciones import NumeroFueraDeRangoError, PartidaTerminadaError
 from interfaces import IGeneradorNumeros, IPartida
-from modelos import Nivel, ResultadoIntento  # noqa: F401
+from modelos import Nivel, ResultadoIntento
 
 
 class Partida(IPartida):
 
     def __init__(self, nivel: Nivel, generador: IGeneradorNumeros, max_intentos: int):
-        # TODO: guardar nivel y max_intentos, generar el secreto con
-        #           generador.generar(nivel.minimo, nivel.maximo),
-        #           e iniciar intentos_usados en 0 y gano en False.
-        raise NotImplementedError("Pendiente de implementar")
+        self.__nivel = nivel
+        self.__max_intentos = max_intentos
+        self.__secreto = generador.generar(nivel.minimo, nivel.maximo)
+        self.__intentos_usados = 0
+        self.__gano = False
 
     def intentar(self, numero: int) -> ResultadoIntento:
-        # TODO:
-        #   1. si terminada -> raise PartidaTerminadaError("La partida ya terminó.")
-        #   2. si el nivel no contiene el número -> raise NumeroFueraDeRangoError(...)
-        #   3. sumar 1 a intentos_usados
-        #   4. devolver SECRETO_ES_MAYOR, SECRETO_ES_MENOR o CORRECTO (y marcar gano)
-        raise NotImplementedError("Pendiente de implementar")
+        if self.terminada:
+            raise PartidaTerminadaError("La partida ya terminó.")
+        if not self.__nivel.contiene(numero):
+            raise NumeroFueraDeRangoError(
+                f"El número debe estar entre {self.__nivel.minimo} y {self.__nivel.maximo}.")
+
+        self.__intentos_usados += 1
+        if numero < self.__secreto:
+            return ResultadoIntento.SECRETO_ES_MAYOR
+        if numero > self.__secreto:
+            return ResultadoIntento.SECRETO_ES_MENOR
+        self.__gano = True
+        return ResultadoIntento.CORRECTO
 
     @property
     def intentos_usados(self) -> int:
-        raise NotImplementedError("Pendiente de implementar")
+        return self.__intentos_usados
 
     @property
     def intentos_restantes(self) -> int:
-        # TODO: max_intentos - intentos_usados
-        raise NotImplementedError("Pendiente de implementar")
+        return self.__max_intentos - self.__intentos_usados
 
     @property
     def max_intentos(self) -> int:
-        raise NotImplementedError("Pendiente de implementar")
+        return self.__max_intentos
 
     @property
     def gano(self) -> bool:
-        raise NotImplementedError("Pendiente de implementar")
+        return self.__gano
 
     @property
     def terminada(self) -> bool:
-        # TODO: True si gano o si intentos_restantes == 0
-        raise NotImplementedError("Pendiente de implementar")
+        return self.__gano or self.intentos_restantes == 0
 
     @property
     def secreto(self) -> int:
-        raise NotImplementedError("Pendiente de implementar")
+        return self.__secreto
