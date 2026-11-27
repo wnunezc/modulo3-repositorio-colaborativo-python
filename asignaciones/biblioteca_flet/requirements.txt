@@ -1,1 +1,1 @@
-flet>=1.0
+flet[desktop]==1.1.4
